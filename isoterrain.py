@@ -146,7 +146,7 @@ def screen_modes(self):
         return window_size, window
 
 # Look for image files
-def FindImages():
+def find_images():
     current_directory = os.path.dirname(os.path.abspath(sys.argv[0]))
     print "CURR DIRECTORY:", current_directory, '\n'
     image_files = []
@@ -164,7 +164,7 @@ def FindImages():
     return image_files
 
 # PYGAME -- Load images
-def LoadImages(resize):
+def load_images(resize):
     IMG.list = []
     IMG.count = 0
     for pics in IMG.files:
@@ -199,8 +199,8 @@ def image_resize():
 def grid_paramaters(self):
     win_sizeX = self[0]; win_sizeY = self[1]
 
-IMG.files = FindImages()
-LoadImages(Draw.size)
+IMG.files = find_images()
+load_images(Draw.size)
 image_resize()
 
 # PYGAME -- FPS and Game Speed
