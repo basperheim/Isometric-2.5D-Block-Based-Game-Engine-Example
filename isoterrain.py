@@ -70,6 +70,7 @@ Window = Object()
 Mouse = Object()
 Grid = Object()
 Screen = Object()
+Screen.shots = 0
 
 class Draw:
     def __init__(self, total, x, y, size, zoom):
@@ -445,7 +446,9 @@ while True:
                 Camera.x += 1
                 
             elif KeyPress[K_F7]: # screenshot
-                pygame.image.save(window, "screenshot.png")
+                image_name = "screenshot" + str(Screen.shots) + ".png"
+                pygame.image.save(window, image_name)
+                Screen.shots += 1
             elif KeyPress[K_F11]: # Change screen mode
                 window_size, window = screen_modes(Screen)
                 SetWindowPos = windll.user32.SetWindowPos        
