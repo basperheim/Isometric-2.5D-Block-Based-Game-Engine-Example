@@ -146,17 +146,20 @@ def screen_modes(self):
         return window_size, window
 
 # Look for image files
-def FindImages():
+def find_images():
     current_directory = os.path.dirname(os.path.abspath(sys.argv[0]))
     print "CURR DIRECTORY:", current_directory, '\n'
     image_files = []
     try:
         types = ('*.png', '*.bmp', '*.pic', '*.jpeg', '*.jpg', '*.ico')
         for extension in types:
-            file_found = glob.glob(current_directory + '\images\\' + extension)
+            file_found = glob.glob(current_directory + '\\' + extension)
             for files in file_found:
                 if len(files) > 0:
-                    image_files += [files]
+                    file_name = files
+                    file_name = file_name.replace(current_directory, "")
+                    file_name = file_name[1:]
+                    image_files += [file_name]
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info(); lineno = tb.tb_lineno
         print '\n', "FindImage Error on line #", lineno, "--", '\n', exc_type, '\n'
@@ -164,17 +167,16 @@ def FindImages():
     return image_files
 
 # PYGAME -- Load images
-def LoadImages(resize):
+def load_images(resize):
     IMG.list = []
     IMG.count = 0
     for pics in IMG.files:
         fileName, fileExtension = os.path.splitext(str(pics))
-        start = fileName.index("images"); fileName = fileName[start+7:]
         __file__ = "iso_terra"    # <--- This code is necessary for a CX_freeze standalone app--otherwise you'll get an error.
 
         # Look for images in the "images" folder
         name = os.path.join(dirname(__file__), "images", fileName+fileExtension)
-        name = os.path.join("images", fileName+fileExtension)
+        name = os.path.join(fileName+fileExtension)
         print "IMAGE NAME:", name
         
         new_name = "IMG." + fileName
@@ -199,8 +201,8 @@ def image_resize():
 def grid_paramaters(self):
     win_sizeX = self[0]; win_sizeY = self[1]
 
-IMG.files = FindImages()
-LoadImages(Draw.size)
+IMG.files = find_images()
+load_images(Draw.size)
 image_resize()
 
 # PYGAME -- FPS and Game Speed
