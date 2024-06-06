@@ -11,7 +11,7 @@ TILE_SIZE = 64
 GRID_SIZE = 128
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-ZOOM_STEP = 8
+ZOOM_STEP = 16
 
 # Set up asset directories
 ASSET_DIR = 'images'
@@ -27,12 +27,17 @@ clock = pygame.time.Clock()
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE)
 pygame.display.set_caption("Isometric Terrain")
 
-# Load images
-images = {terrain: pygame.image.load(os.path.join(ASSET_DIR, f'cube_{terrain}.png')).convert_alpha() for terrain in TERRAIN_TYPES}
+def load_images():
+    global images
+    images = {terrain: pygame.transform.scale(pygame.image.load(os.path.join(ASSET_DIR, f'cube_{terrain}.png')).convert_alpha(), (TILE_SIZE, TILE_SIZE)) for terrain in TERRAIN_TYPES}
 
-# print(images)
-# pygame.quit()
-# sys.exit(1)
+# Load images initially
+load_images()
+
+# Function to handle zoom changes
+def handle_zoom():
+    global TILE_SIZE
+    load_images()
 
 # Load font
 try:
@@ -107,7 +112,7 @@ def draw_grid():
                     # Check if the mouse is hovering over this block
                     if mouse_x in range(x, x + int(TILE_SIZE * 0.8)) and mouse_y in range(y, y + int(TILE_SIZE * 0.3)):
                         hovered_block = block
-                        blit_y -= 12
+                        blit_y -= TILE_SIZE // 3
 
                     window.blit(images[block['terrain']], (blit_x, blit_y))
 
@@ -147,9 +152,11 @@ while running:
                 pygame.quit()
                 sys.exit()
             elif event.key == K_MINUS:
-                TILE_SIZE = max(48, TILE_SIZE - ZOOM_STEP)
+                TILE_SIZE -= 8
+                handle_zoom()
             elif event.key == K_EQUALS:
-                TILE_SIZE = min(256, TILE_SIZE + ZOOM_STEP)
+                TILE_SIZE += 8
+                handle_zoom()
             elif event.key in [K_UP, K_w]:
                 camera.y -= 1
             elif event.key in [K_DOWN, K_s]:
@@ -161,8 +168,8 @@ while running:
 
         elif event.type == MOUSEBUTTONDOWN:
             if event.button == 4:  # Scroll up
-                TILE_SIZE = min(256, TILE_SIZE + ZOOM_STEP)
+                handle_zoom()
             elif event.button == 5:  # Scroll down
-                TILE_SIZE = max(48, TILE_SIZE - ZOOM_STEP)
+                handle_zoom()
 
 pygame.quit()
