@@ -128,55 +128,6 @@ def draw_grid():
         text_surface = font.render(f"Block: ({hovered_block['x']}, {hovered_block['y']})", True, (255, 255, 255))
         window.blit(text_surface, (WINDOW_WIDTH - text_surface.get_width(), 0))
 
-def draw_grid_OLD():
-    window.fill((0, 0, 0))  # Clear the screen
-
-    # Define base drawing coordinates at the center of the window
-    base_x = WINDOW_WIDTH // 2
-    base_y = 30
-
-    # Get the mouse position
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-
-    # Calculate how many blocks we need to draw based on TILE_SIZE and screen dimensions
-    num_blocks_x = (WINDOW_WIDTH // (TILE_SIZE // 2)) + 2
-    num_blocks_y = (WINDOW_HEIGHT // (TILE_SIZE // 4)) + 2
-
-    hovered_block = None
-
-    for grid_y in range(-1, num_blocks_y):
-        for grid_x in range(-1, num_blocks_x):
-
-            # Determine the actual coordinates in the grid array
-            actual_x = grid_x + int(camera.x // (TILE_SIZE // 2)) - grid_y + int(camera.y // (TILE_SIZE // 4))
-            actual_y = grid_y + int(camera.y // (TILE_SIZE // 4)) + grid_x - int(camera.x // (TILE_SIZE // 2))
-
-            key = f"{actual_x}-{actual_y}"
-            block_instance = grid.get(key)
-
-            if block_instance:
-                block = block_instance.to_dict()
-
-                # Calculate the screen position to draw the block
-                draw_x = base_x + (grid_x - grid_y) * (TILE_SIZE // 2)
-                draw_y = base_y + (grid_x + grid_y) * (TILE_SIZE // 4) - block['height']  # Apply height adjustment for 3D effect
-
-                window.blit(images[block['terrain']], (draw_x, draw_y))
-
-                # Check if the mouse is hovering over this block
-                if mouse_x in range(draw_x, draw_x + TILE_SIZE) and mouse_y in range(draw_y, draw_y + TILE_SIZE // 2):
-                    hovered_block = block
-                    hovered_x, hovered_y = draw_x, draw_y  # Save the position to use later
-
-    # Display the coordinates of the hovered block
-    if hovered_block:
-        text_surface = font.render(f"Block: ({hovered_block['x']}, {hovered_block['y']})", True, (255, 255, 255))
-        window.blit(text_surface, (WINDOW_WIDTH - text_surface.get_width(), 0))
-
-    # Display camera position
-    camera_text = font.render(f"Camera: ({camera.x}, {camera.y})", True, (255, 255, 255))
-    window.blit(camera_text, (WINDOW_WIDTH - camera_text.get_width(), camera_text.get_height()))
-
 # Main loop
 running = True
 while running:
