@@ -1,5 +1,7 @@
 # Isometric 2.5D Block-Based Game Engine Example
 
+![Python Pygame isometric game screenshot](https://github.com/basperheim/Isometric-2.5D-Block-Based-Game-Engine-Example/assets/4186751/1869bfcb-b95a-4c76-b1fe-b7e4cc3a9888)
+
 ## Overview
 
 This repository contains a simple proof-of-concept game engine implemented in Python using the Pygame library. The engine provides a 2.5D isometric perspective for creating block-based games.
